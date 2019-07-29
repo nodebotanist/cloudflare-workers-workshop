@@ -7,7 +7,8 @@
 
 * Working knowledge of the command line
 * [Node 12.x](https://nodejs.org) or [Rust](https://rustup.rs) installed
-* Working knowledge of JavaScript/Node
+* Working knowledge of JavaScript/Node.js
+* if you're going to use Node.js
 
 ### Once you show up
 
