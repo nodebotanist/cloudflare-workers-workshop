@@ -20,4 +20,4 @@ Head on over to the [Workshop Instructions](./instructions.md) to build your fir
 
 ### Meta stuff
 
-You can see the [learning goals](./learning_goals.md) and the [problem statement](./problem_statement) for this workshop, if you like.
+You can see the [learning goals](./learning_goals.md) and the [problem statement](./problem_statement.md) for this workshop, if you like.
