@@ -1,5 +1,5 @@
 {
-    "name": "my-app",
+    "name": "color-app",
     "version": "1.0.0",
     "description": "package for creating workers templates",
     "main": "index.js",

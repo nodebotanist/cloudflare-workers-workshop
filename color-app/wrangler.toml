@@ -1,4 +1,4 @@
-name = "my-app"
+name = "color-app"
 type = "webpack"
 zone_id = ""
 private = false
