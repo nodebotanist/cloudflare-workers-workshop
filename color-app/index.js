@@ -12,21 +12,21 @@ function handler(request) {
     const color_url = new URL(request.url).search
     const my_color = new URLSearchParams(color_url).get('color')
 
-    let statusCode, body
+    let body
+    let init = {
+        headers: {
+            'content-type': 'application/json',
+            statusCode: 200
+        }
+    }
 
     if (my_color) {
-        statusCode = 200
         body = JSON.stringify({ color: my_color })
     } else { 
-        statusCode = 200
         body = JSON.stringify({ color: 'random color' })
     }
 
-    const headers = {
-        'content-type': 'application/json'
-    }
-
-    return new Response(body)
+    return new Response(body, init)
 }
 
 async function handleRequest(request) {
