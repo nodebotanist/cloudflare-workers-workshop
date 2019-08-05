@@ -1,3 +1,4 @@
+const url = require('url')
 const Router = require('./router')
 
 /**
@@ -8,23 +9,30 @@ addEventListener('fetch', event => {
 })
 
 function handler(request) {
-    const init = {
-        headers: { 'content-type': 'application/json' },
+    const color_url = new URL(request.url).search
+    const my_color = new URLSearchParams(color_url).get('color')
+
+    let statusCode, body
+
+    if (my_color) {
+        statusCode = 200
+        body = JSON.stringify({ color: my_color })
+    } else { 
+        statusCode = 200
+        body = JSON.stringify({ color: 'random color' })
     }
-    const body = JSON.stringify({ some: 'json' })
-    return new Response(body, init)
+
+    const headers = {
+        'content-type': 'application/json'
+    }
+
+    return new Response(body)
 }
 
 async function handleRequest(request) {
     const r = new Router()
     // Replace with the approriate paths and handlers
-    r.get('.*/bar', () => new Response('responding for /bar'))
-    r.get('.*/foo', req => handler(req))
-    r.post('.*/foo.*', req => handler(req))
-    r.get('/demos/router/foo', req => fetch(req)) // return the response from the origin
-
-    r.get('/', () => new Response('Hello worker!')) // return a default message for the root route
-
+    r.get('.*/bar/*', () => handler(request))
     const resp = await r.route(request)
     return resp
 }
