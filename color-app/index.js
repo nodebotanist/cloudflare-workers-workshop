@@ -11,19 +11,19 @@ function handler(request) {
     const init = {
         headers: { 'content-type': 'application/json' },
     }
+    // import the url library up top
+    // create a new URL with request.url and a new URLSearchParams with the URL object
+    // use the URLSearchParams object to get the color param
+    // If there's a color, send it
+    // otherwise, send a random color
     const body = JSON.stringify({ some: 'json' })
     return new Response(body, init)
 }
 
 async function handleRequest(request) {
     const r = new Router()
-    // Replace with the approriate paths and handlers
-    r.get('.*/bar', () => new Response('responding for /bar'))
-    r.get('.*/foo', req => handler(req))
-    r.post('.*/foo.*', req => handler(req))
-    r.get('/demos/router/foo', req => fetch(req)) // return the response from the origin
 
-    r.get('/', () => new Response('Hello worker!')) // return a default message for the root route
+    // creato a route color here to use the handler function
 
     const resp = await r.route(request)
     return resp
