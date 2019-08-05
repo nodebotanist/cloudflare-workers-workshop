@@ -1,16 +1,14 @@
 const url = require('url')
 const Router = require('./router')
+const color = require('color')
 
-/**
- * Example of how router can be used in an application
- *  */
 addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })
 
 function handler(request) {
     const color_url = new URL(request.url).search
-    const my_color = new URLSearchParams(color_url).get('color')
+    let my_color = new URLSearchParams(color_url).get('color')
 
     let body
     let init = {
@@ -21,9 +19,21 @@ function handler(request) {
     }
 
     if (my_color) {
+        try {
+            my_color = color(my_color).hex()
+        } catch (err) {
+            init.headers.statusCode = 400
+            body = JSON.stringify({error: 'invalid color'})
+            return new Response(body, init)
+        }
         body = JSON.stringify({ color: my_color })
     } else { 
-        body = JSON.stringify({ color: 'random color' })
+        my_color = color({
+            r: Math.round(Math.random() * 255),
+            g: Math.round(Math.random() * 255),
+            b: Math.round(Math.random() * 255)
+        })
+        body = JSON.stringify({ color: my_color.hex() })
     }
 
     return new Response(body, init)
@@ -32,7 +42,7 @@ function handler(request) {
 async function handleRequest(request) {
     const r = new Router()
     // Replace with the approriate paths and handlers
-    r.get('.*/bar/*', () => handler(request))
+    r.get('.*/color/*', () => handler(request))
     const resp = await r.route(request)
     return resp
 }
