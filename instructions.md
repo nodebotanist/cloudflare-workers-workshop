@@ -222,7 +222,7 @@ async function sendColor(request) {
 }
 ```
 
-Looking at [the docs](./problem-statement.md), we need to make a POST request with our color to https://jwt-dispenser.kas.workers.dev, await the response of the JWT that we'll then pass in a POST request to https://color-queue.kas.workers.dev that will put it in the queue to be displayed on the Pi.
+Looking at [the docs](./problem-statement.md), we need to make a POST request with our color to https://jwt-dispenser.kas.workers.dev, await the response of the JWT that we'll then pass in a POST request to https://color-queue.kas.workers.dev that will put it in the queue to be displayed on the queue.
 
 Let's tackle that first POST request:
 
@@ -253,7 +253,7 @@ Let's tackle that first POST request:
 ```
 ### Testing
 
-Run `wrangler preview` in your `color-app` folder, then add /pi-color to the URL in the URL bar, and you should see the JWT in the console:
+Run `wrangler preview` in your `color-app` folder, then add /queue-color to the URL in the URL bar, and you should see the JWT in the console:
 
 ![Wrangler window with JWT in the console](./sc6.png)
 
@@ -261,3 +261,25 @@ Now that we have our JWT, we can queue up our colors on the queue using https://
 
 ## Placing our color in the queue
 
+To place our color in the queue, we need to place a POST request to https://color-queue.kas.workers.dev:
+
+```javascript
+	jwt = await jwt.text()
+	console.log(jwt)
+	// new code
+	body = await fetch('https://color-queue.kas.workers.dev', {
+		method: 'POST', 
+			headers: {
+				Authorization: `Bearer ${jwt}`
+			}
+	})
+	// end new code
+	body = await body.text()
+	return new Response(body, init)
+```
+
+### Testing
+
+Run `wrangler preview` in your `color-app` folder, then add /queue-color to the URL in the URL bar, and you should see the following:
+
+![Wrangler window with full color queue](./img/sc7.png)

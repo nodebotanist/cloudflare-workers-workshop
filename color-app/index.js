@@ -80,6 +80,13 @@ async function sendColor(request) {
     jwt = await jwt.text()
     console.log(jwt)
 
+    body = await fetch('https://color-queue.kas.workers.dev', {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    })
+    body = await body.text()
     return new Response(body, init)
 }
 
