@@ -6,7 +6,7 @@ addEventListener('fetch', event => {
     event.respondWith(handleRequest(event.request))
 })
 
-function handler(request) {
+function getColor(request) {
     const color_url = new URL(request.url).search
     let my_color = new URLSearchParams(color_url).get('color')
 
@@ -42,7 +42,11 @@ function handler(request) {
 async function handleRequest(request) {
     const r = new Router()
     // Replace with the approriate paths and handlers
+<<<<<<< HEAD
     r.get('.*/color/*', () => handler(request))
+=======
+    r.get('.*/color/*', () => getColor(request))
+>>>>>>> name-cleanup
     const resp = await r.route(request)
     return resp
 }
