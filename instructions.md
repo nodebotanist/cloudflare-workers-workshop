@@ -2,7 +2,7 @@
 
 Remember to have everything from the [prerequisites](./README.md#prerequisites) ready.
 
-## Getting started
+## Part 0 Getting started
 
 First, we need to install Wrangler, set it up. and pull down a boilerplate project.
 
@@ -19,7 +19,10 @@ Use the [`wrangler config`](https://github.com/cloudflare/wrangler#Configuration
 Our first Workers application will use a [Template Gallery](https://workers.cloudflare.com/docs/templates/) boilerplate as its base, specifically the Router boilerplate. Run the following to set up tho boilerplate:
 
 ```bash
-wrangler generate my-app https://github.com/cloudflare/worker-template-router
+wrangler generate color-app https://github.com/cloudflare/worker-template-router
 ```
 
-This will create a `my-app` folder in the directory you ran the command in. Run `cd my-app` and open the folder in your favorite code editor.
+This will create a `color-app` folder in the directory you ran the command in. Run `cd color-app` and open the folder in your favorite code editor.
+
+## Part 1: Creating our own routes
+
