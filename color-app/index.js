@@ -42,11 +42,7 @@ function getColor(request) {
 async function handleRequest(request) {
     const r = new Router()
     // Replace with the approriate paths and handlers
-<<<<<<< HEAD
-    r.get('.*/color/*', () => handler(request))
-=======
     r.get('.*/color/*', () => getColor(request))
->>>>>>> name-cleanup
     const resp = await r.route(request)
     return resp
 }
