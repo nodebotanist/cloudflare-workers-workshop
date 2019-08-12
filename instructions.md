@@ -88,4 +88,18 @@ async function handleRequest(request) {
 }
 ```
 
-### Testing our function
+### Testing our route
+
+1. In the `color_app` directory, run `wrangler preview`. After some thinking, you'll be taken to your browser, where you should see the following:
+
+![Wrangler screen with no route input](./img/sc1.png)
+
+1. In the URL bar, add /color to https://example.com and you should see:
+
+![Wrangler screen with the /color route](./img/sc2.png)
+
+1. Finally, add `?color=purple` to the end of the url to get:
+ 
+![Wrangler screen with a color query parameter](./img/sc3.png)
+
+If that all works, we're ready to require an npm module to parse our colors to hex!
