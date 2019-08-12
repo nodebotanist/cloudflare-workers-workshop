@@ -26,3 +26,31 @@ This will create a `color-app` folder in the directory you ran the command in. R
 
 ## Part 1: Creating our own routes
 
+### Creating our new route
+
+1. add a `require` statement to bring in the `url` library to line 1:
+
+```javascript
+const url = require('url')
+const Router = require('./router')
+```
+
+1. rename the `handler` function on line 11 to `getColor`
+
+```javascript
+function getColor(request) {
+```
+
+1. create a `color_url` and `my_color` variable within the getColor function that will craft a URL object and extract the query string parameter `color`, respectively:
+
+```javascript
+function getColor(request) {
+    const color_url = new URL(request.url).search
+    const my_color = new URLSearchParams(color_url).get('color')
+```
+
+1. Add an `if` statement that will return the value of the `color` query if one was sent, and the string `random color` otherwise
+
+1. In thegco
+
+### Testing our function
