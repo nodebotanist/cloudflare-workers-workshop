@@ -283,3 +283,7 @@ To place our color in the queue, we need to place a POST request to https://colo
 Run `wrangler preview` in your `color-app` folder, then add /queue-color to the URL in the URL bar, and you should see the following:
 
 ![Wrangler window with full color queue](./img/sc7.png)
+
+## Seeing your colors
+
+go to [the color queue](https://color-queue.kas.workers.dev) to see your colors!
