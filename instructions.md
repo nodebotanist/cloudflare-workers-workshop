@@ -170,7 +170,7 @@ Then add a `color` query parameter, like `?color=cornflowerblue`
 
 ### Getting a JWT from color-queue.kas.workers.dev
 
-first, we'll create a new route to handle getting and sending colors to the Pi. In your `handleRequest` function:
+first, we'll create a new route to handle getting and sending colors to the queue. In your `handleRequest` function:
 
 ```javascript
 async function handleRequest(request) {
@@ -178,7 +178,7 @@ async function handleRequest(request) {
 	// Replace with the approriate paths and handlers
 	r.get('.*/color/*', () => getColor(request))
 	// new code
-	r.get('.*/pi-color/*', () => sendColor(request))
+	r.get('.*/queue-color/*', () => sendColor(request))
 	// end new code
 	const resp = await r.route(request)
 	return resp
@@ -256,3 +256,8 @@ Let's tackle that first POST request:
 Run `wrangler preview` in your `color-app` folder, then add /pi-color to the URL in the URL bar, and you should see the JWT in the console:
 
 ![Wrangler window with JWT in the console](./sc6.png)
+
+Now that we have our JWT, we can queue up our colors on the queue using https://color-queue.kas.workers.dev!
+
+## Placing our color in the queue
+

@@ -87,7 +87,7 @@ async function handleRequest(request) {
     const r = new Router()
     // Replace with the approriate paths and handlers
     r.get('.*/color/*', () => getColor(request))
-    r.get('.*/pi-color/*', () => sendColor(request))
+    r.get('.*/queue-color/*', () => sendColor(request))
     const resp = await r.route(request)
     return resp
 }
