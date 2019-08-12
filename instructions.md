@@ -251,3 +251,8 @@ Let's tackle that first POST request:
 	return new Response(body, init)
 }
 ```
+### Testing
+
+Run `wrangler preview` in your `color-app` folder, then add /pi-color to the URL in the URL bar, and you should see the JWT in the console:
+
+![Wrangler window with JWT in the console](./sc6.png)
