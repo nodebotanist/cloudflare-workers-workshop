@@ -170,9 +170,5 @@ Run `wrangler preview` in your `color_app` directory and add /color to the end o
 
 Then add a `color` query parameter, like `?color=cornflowerblue`
 
-<<<<<<< HEAD
-### Testing our function
->>>>>>> instructions
-=======
 ![Wrangler preview window with cornflowerblue hex color](./img/sc5.png)
->>>>>>> instructions
+
