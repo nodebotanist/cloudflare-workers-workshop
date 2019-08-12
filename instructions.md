@@ -103,3 +103,65 @@ async function handleRequest(request) {
 ![Wrangler screen with a color query parameter](./img/sc3.png)
 
 If that all works, we're ready to require an npm module to parse our colors to hex!
+
+## Parsing colors with the npm `color` module
+
+### Install and include the `color` module
+
+In your `color_app` directory, run:
+
+```bash
+npm i color
+```
+
+At the top of your `index.js` file, add a `require` statement to bring in the module:
+
+```javascript
+const url = require('url')
+const Router = require('./router')
+// new code
+const color = require('color')
+// end new code
+```
+
+Now, let's add color parsing into the if statement where we get a `color` query string parameter:
+
+```javascript
+if (my_color) {
+	// new code
+	try {
+		my_color = color(my_color).hex()
+	} catch (err) {
+		init.headers.statusCode = 400
+		body = JSON.stringify({error: 'invalid color'})
+			return new Response(body, init)
+	}
+	// end new code
+	body = JSON.stringify({ color: my_color.hex() })
+} else { 
+```
+
+And in our else statement, let's generate an actual random color and send it back: 
+
+```javascript
+} else { 
+	// new code
+	my_color = color({
+		r: Math.round(Math.random() * 255),
+		g: Math.round(Math.random() * 255),
+		b: Math.round(Math.random() * 255)
+	})
+	body = JSON.stringify({ color: my_color.hex() })
+	// end new code
+}
+```
+
+### Testing
+
+Run `wrangler preview` in your `color_app` directory and add /color to the end of the URL to get a random color in hex:
+
+![Wrangler preview window with random hex color](./img/sc4.png)
+
+Then add a `color` query parameter, like `?color=cornflowerblue`
+
+![Wrangler preview window with cornflowerblue hex color](./img/sc5.png)
