@@ -2,7 +2,7 @@
 
 Remember to have everything from the [prerequisites](./README.md#prerequisites) ready.
 
-## Getting started
+## Part 0 Getting started
 
 First, we need to install Wrangler, set it up. and pull down a boilerplate project.
 
@@ -19,12 +19,6 @@ Use the [`wrangler config`](https://github.com/cloudflare/wrangler#Configuration
 Our first Workers application will use a [Template Gallery](https://workers.cloudflare.com/docs/templates/) boilerplate as its base, specifically the Router boilerplate. Run the following to set up tho boilerplate:
 
 ```bash
-<<<<<<< HEAD
-wrangler generate my-app https://github.com/cloudflare/worker-template-router
-```
-
-This will create a `my-app` folder in the directory you ran the command in. Run `cd my-app` and open the folder in your favorite code editor.
-=======
 wrangler generate color-app https://github.com/cloudflare/worker-template-router
 ```
 
@@ -172,3 +166,124 @@ Then add a `color` query parameter, like `?color=cornflowerblue`
 
 ![Wrangler preview window with cornflowerblue hex color](./img/sc5.png)
 
+## Calling outside functions
+
+### Getting a JWT from color-queue.kas.workers.dev
+
+first, we'll create a new route to handle getting and sending colors to the queue. In your `handleRequest` function:
+
+```javascript
+async function handleRequest(request) {
+	const r = new Router()
+	// Replace with the approriate paths and handlers
+	r.get('.*/color/*', () => getColor(request))
+	// new code
+	r.get('.*/queue-color/*', () => sendColor(request))
+	// end new code
+	const resp = await r.route(request)
+	return resp
+}
+```
+
+Next we'll create the `sendColor` function and copy the contents of `getColor` into it (we'll be reusing a lot of it). Note the changes below; specifically adding `async` to the function declaration-- this allows us to use `await` in the function.
+
+```javascript
+async function sendColor(request) {
+	const color_url = new URL(request.url).search
+	let my_color = new URLSearchParams(color_url).get('color')
+
+	let body
+	let init = {
+		headers: {
+			'content-type': 'application/json',
+			statusCode: 200
+		}
+	}
+
+	if (my_color) {
+		try {
+			my_color = color(my_color)
+		} catch (err) {
+			init.headers.statusCode = 400
+			body = JSON.stringify({
+				error: 'invalid color'
+			})
+			return new Response(body, init)
+		}
+	} else {
+		my_color = color({
+			r: Math.round(Math.random() * 255),
+			g: Math.round(Math.random() * 255),
+			b: Math.round(Math.random() * 255)
+		})
+	}
+
+	return new Response(body, init)
+}
+```
+
+Looking at [the docs](./problem-statement.md), we need to make a POST request with our color to https://jwt-dispenser.kas.workers.dev, await the response of the JWT that we'll then pass in a POST request to https://color-queue.kas.workers.dev that will put it in the queue to be displayed on the queue.
+
+Let's tackle that first POST request:
+
+```javascript
+	} else {
+		my_color = color({
+			r: Math.round(Math.random() * 255),
+			g: Math.round(Math.random() * 255),
+			b: Math.round(Math.random() * 255)
+		})
+	}
+
+// new codo
+	let jwt = await fetch('https://jwt-dispenser.kas.workers.dev', {
+		method: 'POST',
+		body: JSON.stringify({
+			r: my_color.red(),
+			g: my_color.green(),
+			b: my_color.blue()
+		})
+	})
+	jwt = await jwt.text()
+	console.log(jwt)
+// end new code
+
+	return new Response(body, init)
+}
+```
+### Testing
+
+Run `wrangler preview` in your `color-app` folder, then add /queue-color to the URL in the URL bar, and you should see the JWT in the console:
+
+![Wrangler window with JWT in the console](./sc6.png)
+
+Now that we have our JWT, we can queue up our colors on the queue using https://color-queue.kas.workers.dev!
+
+## Placing our color in the queue
+
+To place our color in the queue, we need to place a POST request to https://color-queue.kas.workers.dev:
+
+```javascript
+	jwt = await jwt.text()
+	console.log(jwt)
+	// new code
+	body = await fetch('https://color-queue.kas.workers.dev', {
+		method: 'POST', 
+			headers: {
+				Authorization: `Bearer ${jwt}`
+			}
+	})
+	// end new code
+	body = await body.text()
+	return new Response(body, init)
+```
+
+### Testing
+
+Run `wrangler preview` in your `color-app` folder, then add /queue-color to the URL in the URL bar, and you should see the following:
+
+![Wrangler window with full color queue](./img/sc7.png)
+
+## Seeing your colors
+
+go to [the color queue](https://color-queue.kas.workers.dev) to see your colors!g
