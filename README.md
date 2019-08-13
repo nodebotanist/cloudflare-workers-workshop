@@ -3,7 +3,7 @@
 
 ## Students
 
-### Prequisites
+### Prerequisites
 
 * Working knowledge of the command line
 * [Node 12.x](https://nodejs.org) or [Rust](https://rustup.rs) installed
